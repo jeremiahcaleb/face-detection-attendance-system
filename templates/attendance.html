@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Attendance Log</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      color: #333;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h2 {
+      color: #003366;
+    }
+
+    table {
+      width: 80%;
+      margin: 20px auto;
+      border-collapse: collapse;
+    }
+
+    table, th, td {
+      border: 1px solid #ddd;
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f2f2f2;
+      color: #003366;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    a {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+      color: #0066cc;
+      text-decoration: none;
+      font-size: 18px;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Attendance Log (SQLite)</h2>
+  <table>
+    <tr>
+      <th>Name</th>
+      <th>Timestamp</th>
+    </tr>
+    {% for name, time in data_sqlite %}
+      <tr>
+        <td>{{ name }}</td>
+        <td>{{ time }}</td>
+      </tr>
+    {% endfor %}
+  </table>
+
+  <h2>Attendance Log (MySQL)</h2>
+  <table>
+    <tr>
+      <th>Name</th>
+      <th>Timestamp</th>
+    </tr>
+    {% for name, time in data_mysql %}
+      <tr>
+        <td>{{ name }}</td>
+        <td>{{ time }}</td>
+      </tr>
+    {% endfor %}
+  </table>
+
+  <br><a href="/">Go Back</a>
+
+</body>
+</html>
