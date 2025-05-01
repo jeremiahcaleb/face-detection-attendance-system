@@ -95,107 +95,32 @@ def view_attendance():
     except Exception as e:
         flash(f'Error: {str(e)}')
         return redirect(url_for('index'))
-from flask import Flask, render_template, request, redirect, url_for, flash
-from camera import detect_faces_and_capture  # Assuming your face detection function is in camera.py
-from db import connect_sqlite, init_databases  # Assuming your SQLite connection and init functions are in db.py
-import os
-import datetime
-
-app = Flask(__name__)
-app.secret_key = 'your_secret_key'  # Needed for flash messages
-
-# Initialize the database
-init_databases()
-
-@app.route('/')
-def index():
-    return render_template('index.html')
 
 
-# ---------- Register Student ----------
-@app.route('/register', methods=['GET', 'POST'])
-def register():
+# ---------- Login Route ----------
+@app.route('/login', methods=['GET', 'POST'])
+def login():
     if request.method == 'POST':
-        name = request.form['name']
+        # Handle login logic here (you can validate the user)
+        username = request.form['username']
+        password = request.form['password']
+        
+        # For simplicity, this example doesn't validate against a database
+        if username == "admin" and password == "password":  # Simple condition, replace with real validation
+            flash('Login successful!')
+            return redirect(url_for('index'))  # Redirect to the home page after successful login
+        else:
+            flash('Invalid username or password.')
 
-        # Capture face and store it
-        detect_faces_and_capture(name)
-
-        # Save student to DB
-        try:
-            conn = connect_sqlite()
-            cursor = conn.cursor()
-            cursor.execute("INSERT INTO students (name) VALUES (?)", (name,))
-            conn.commit()
-            conn.close()
-
-            flash(f'{name} registered successfully!')
-        except Exception as e:
-            flash(f'Error: {str(e)}')
-        return redirect(url_for('register'))
-
-    return render_template('register.html')
+    return render_template('login.html')
 
 
-# ---------- Take Attendance ----------
-@app.route('/take_attendance', methods=['GET', 'POST'])
-def take_attendance():
-    if request.method == 'POST':
-        name = request.form['name']
-
-        # Capture face and store it
-        detect_faces_and_capture(name)
-
-        now = datetime.datetime.now()
-        timestamp = now.strftime('%Y-%m-%d %H:%M:%S')
-
-        try:
-            conn = connect_sqlite()
-            cursor = conn.cursor()
-
-            # Get student ID or insert if new
-            cursor.execute("SELECT id FROM students WHERE name = ?", (name,))
-            result = cursor.fetchone()
-
-            if result:
-                student_id = result[0]
-            else:
-                cursor.execute("INSERT INTO students (name) VALUES (?)", (name,))
-                student_id = cursor.lastrowid
-
-            # Insert attendance
-            cursor.execute("INSERT INTO attendance (student_id, name, timestamp) VALUES (?, ?, ?)",
-                           (student_id, name, timestamp))
-
-            conn.commit()
-            conn.close()
-
-            flash(f'Attendance marked for {name} at {timestamp}')
-        except Exception as e:
-            flash(f'Error: {str(e)}')
-
-        return redirect(url_for('take_attendance'))
-
-    return render_template('attendance.html')
-
-
-# ---------- View Attendance Records ----------
-@app.route('/view_attendance')
-def view_attendance():
-    try:
-        conn = connect_sqlite()
-        cursor = conn.cursor()
-        cursor.execute("SELECT students.name, attendance.timestamp FROM attendance JOIN students ON students.id = attendance.student_id ORDER BY attendance.timestamp DESC")
-        data_sqlite = cursor.fetchall()
-        conn.close()
-        return render_template('view.html', data_sqlite=data_sqlite)
-    except Exception as e:
-        flash(f'Error: {str(e)}')
-        return redirect(url_for('index'))
-
-
-if __name__ == '__main__':
-    app.run(debug=True)
+# ---------- Logout Route ----------
+@app.route('/logout')
+def logout():
+    # Handle logout logic here (e.g., session management)
+    flash('You have been logged out.')
+    return redirect(url_for('index'))
 
 
 if __name__ == '__main__':
