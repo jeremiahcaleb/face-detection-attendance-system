@@ -95,27 +95,32 @@ def view_attendance():
     except Exception as e:
         flash(f'Error: {str(e)}')
         return redirect(url_for('index'))
-from flask import Flask, render_template, request, redirect, url_for, flash
-from camera import detect_faces_and_capture  # Assuming your face detection function is in camera.py
-from db import connect_sqlite, init_databases  # Assuming your SQLite connection and init functions are in db.py
-import os
-import datetime
-
-app = Flask(__name__)
-app.secret_key = 'your_secret_key'  # Needed for flash messages
-
-# Initialize the database
-init_databases()
-
-@app.route('/')
-def index():
-    return render_template('index.html')
 
 
-# ---------- Register Student ----------
-@app.route('/register', methods=['GET', 'POST'])
-def register():
+# ---------- Login Route ----------
+@app.route('/login', methods=['GET', 'POST'])
+def login():
     if request.method == 'POST':
+        # Handle login logic here (you can validate the user)
+        username = request.form['username']
+        password = request.form['password']
+        
+        # For simplicity, this example doesn't validate against a database
+        if username == "admin" and password == "password":  # Simple condition, replace with real validation
+            flash('Login successful!')
+            return redirect(url_for('index'))  # Redirect to the home page after successful login
+        else:
+            flash('Invalid username or password.')
+
+    return render_template('login.html')
+
+
+# ---------- Logout Route ----------
+@app.route('/logout')
+def logout():
+    # Handle logout logic here (e.g., session management)
+    flash('You have been logged out.')
+    return redirect(url_for('index'))
         name = request.form['name']
 
         # Capture face and store it
@@ -192,6 +197,6 @@ def view_attendance():
     except Exception as e:
         flash(f'Error: {str(e)}')
         return redirect(url_for('index'))
-
+      
 if __name__ == '__main__':
     app.run(debug=True)
