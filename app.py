@@ -107,7 +107,7 @@ def view_attendance():
 def login():
     if request.method == 'POST':
         # Handle login logic here (you can validate the user)
-        username = request.form['username']
+        username = request.form['email']
         password = request.form['password']
         
         # For simplicity, this example doesn't validate against a database
