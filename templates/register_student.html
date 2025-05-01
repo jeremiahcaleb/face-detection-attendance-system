@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Register Student</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.4/css/bulma.min.css"
+    />
+  </head>
+  <body>
+    <section class="section">
+      <div class="container">
+        <h1 class="title has-text-centered">Register New Student</h1>
+
+        <form method="POST" action="/register_student">
+          <div class="field">
+            <label class="label">Name</label>
+            <div class="control">
+              <input
+                class="input"
+                type="text"
+                name="name"
+                placeholder="Enter student name"
+                required
+              />
+            </div>
+          </div>
+          <div class="field">
+            <label class="label">Register Number</label>
+            <div class="control">
+              <input
+                class="input"
+                type="text"
+                name="reg_no"
+                placeholder="Enter register number"
+                required
+              />
+            </div>
+          </div>
+          <div class="field is-grouped is-grouped-centered">
+            <div class="control">
+              <button class="button is-primary" type="submit">
+                Register and Capture Images
+              </button>
+            </div>
+            <div class="control">
+              <a class="button is-light" href="/admin">Cancel</a>
+            </div>
+          </div>
+        </form>
+
+        {% with messages = get_flashed_messages() %} {% if messages %}
+        <div class="notification is-success">{{ messages[0] }}</div>
+        {% endif %} {% endwith %}
+      </div>
+    </section>
+  </body>
+</html>

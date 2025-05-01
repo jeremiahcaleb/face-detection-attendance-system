@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>View Attendance</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.4/css/bulma.min.css"
+    />
+  </head>
+  <body>
+    <section class="section">
+      <div class="container">
+        <h1 class="title has-text-centered">Attendance Records</h1>
+
+        <table class="table is-fullwidth is-striped">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Register Number</th>
+              <th>Timestamp</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for record in attendance %}
+            <tr>
+              <td>{{ record[0] }}</td>
+              <td>{{ record[1] }}</td>
+              <td>{{ record[2] }}</td>
+              <td>{{ record[3] }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+        <div class="has-text-centered">
+          <a class="button is-light" href="/admin">Back to Dashboard</a>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>
